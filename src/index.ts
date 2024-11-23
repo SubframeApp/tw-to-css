@@ -2,7 +2,7 @@ import types from "..";
 import { processTailwindCSS, formatCSS } from "./util";
 import { cssToJson } from "./util/css-to-json";
 
-const getCSS: typeof types.getCSS = (content, config) => {
+const getCSS: typeof types.getCSS = (content, config, twiOptions) => {
   const preflight = ((config?.corePlugins as any)?.preflight as boolean) ?? false;
   const corePlugins = (config?.corePlugins as {}) || {};
 
@@ -15,6 +15,7 @@ const getCSS: typeof types.getCSS = (content, config) => {
       },
     },
     content,
+    twiOptions,
   });
 };
 
@@ -52,10 +53,15 @@ const tailwindInlineCSS: typeof types.tailwindInlineCSS =
 
     const { 1: options } = params || {};
 
-    const defaultOptions = { merge: true, minify: true, ignoreMediaQueries: true };
+    const defaultOptions = {
+      merge: true,
+      minify: true,
+      ignoreMediaQueries: true,
+      transformCssVariables: true,
+    };
     const twiOptions = { ...defaultOptions, ...mainOptions, ...options };
 
-    let css = formatCSS(getCSS(content, config));
+    let css = formatCSS(getCSS(content, config, twiOptions));
 
     if (twiOptions?.ignoreMediaQueries) {
       css.removeMediaQueries();

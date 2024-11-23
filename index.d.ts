@@ -17,9 +17,14 @@ export interface TailwindConfig {
 
 type Content = string | Record<string, boolean> | TemplateStringsArray | Content[];
 
-type Options = { merge?: boolean; minify?: boolean; ignoreMediaQueries?: boolean };
+type Options = {
+  merge?: boolean;
+  minify?: boolean;
+  ignoreMediaQueries?: boolean;
+  transformCssVariables?: boolean;
+};
 
-export function getCSS(content: string, config?: TailwindConfig): string;
+export function getCSS(content: string, config?: TailwindConfig, twiOptions?: Options): string;
 
 export function tailwindToCSS(params: { config?: TailwindConfig; options?: Options }): {
   twi: typeof twi;
