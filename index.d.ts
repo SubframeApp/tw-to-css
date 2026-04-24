@@ -24,7 +24,11 @@ type Options = {
   transformCssVariables?: boolean;
 };
 
-export function getCSS(content: string, config?: TailwindConfig, twiOptions?: Options): string;
+export function getCSS(
+  content: string,
+  config?: TailwindConfig,
+  twiOptions?: Options
+): Promise<string>;
 
 export function tailwindToCSS(params: { config?: TailwindConfig; options?: Options }): {
   twi: typeof twi;
@@ -34,11 +38,11 @@ export function tailwindToCSS(params: { config?: TailwindConfig; options?: Optio
 export function classListFormatter(content: Content, options?: Options): string;
 export function classListFormatter(...content: Content[]): string;
 
-export function twi(content: Content, options?: Options): string;
-export function twi(...content: Content[]): string;
+export function twi(content: Content, options?: Options): Promise<string>;
+export function twi(...content: Content[]): Promise<string>;
 
-export function twj(content: Content, options?: Options): CSSProperties;
-export function twj(...content: Content[]): CSSProperties;
+export function twj(content: Content, options?: Options): Promise<CSSProperties>;
+export function twj(...content: Content[]): Promise<CSSProperties>;
 
 export function tailwindInlineCSS(config?: TailwindConfig, options?: Options): typeof twi;
 

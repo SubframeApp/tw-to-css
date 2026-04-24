@@ -4,11 +4,11 @@ import { TailwindConfig } from "tailwindcss/tailwindconfig.faketype";
 import { createTailwindcssPlugin, defaultTailwindCSS } from ".";
 import { Options } from "../..";
 
-export const processTailwindCSS = (props: {
+export const processTailwindCSS = async (props: {
   config?: TailwindConfig;
   content: string;
   twiOptions?: Options;
-}) => {
+}): Promise<string> => {
   const tailwindcssPlugin = createTailwindcssPlugin({
     config: props.config,
     content: props.content,
@@ -18,6 +18,6 @@ export const processTailwindCSS = (props: {
     plugins.push(postcssVariables());
   }
   const processor = postcss(plugins);
-  const result = processor.process(defaultTailwindCSS, { from: undefined });
+  const result = await processor.process(defaultTailwindCSS, { from: undefined });
   return result.css;
 };
