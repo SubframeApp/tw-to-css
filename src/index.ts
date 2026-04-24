@@ -2,7 +2,7 @@ import types from "..";
 import { processTailwindCSS, formatCSS } from "./util";
 import { cssToJson } from "./util/css-to-json";
 
-const getCSS: typeof types.getCSS = (content, config, twiOptions) => {
+const getCSS: typeof types.getCSS = async (content, config, twiOptions) => {
   const preflight = ((config?.corePlugins as any)?.preflight as boolean) ?? false;
   const corePlugins = (config?.corePlugins as {}) || {};
 
@@ -48,7 +48,7 @@ const classListFormatter: typeof types.classListFormatter = (...params) => {
 
 const tailwindInlineCSS: typeof types.tailwindInlineCSS =
   (config, mainOptions) =>
-  (...params: any) => {
+  async (...params: any) => {
     const content = classListFormatter(params);
 
     const { 1: options } = params || {};
@@ -61,7 +61,7 @@ const tailwindInlineCSS: typeof types.tailwindInlineCSS =
     };
     const twiOptions = { ...defaultOptions, ...mainOptions, ...options };
 
-    let css = formatCSS(getCSS(content, config, twiOptions));
+    let css = formatCSS(await getCSS(content, config, twiOptions));
 
     if (twiOptions?.ignoreMediaQueries) {
       css.removeMediaQueries();
@@ -80,8 +80,8 @@ const tailwindInlineCSS: typeof types.tailwindInlineCSS =
 
 const tailwindInlineJson: typeof types.tailwindInlineJson =
   (config, mainOptions) =>
-  (...params: any) => {
-    return cssToJson(tailwindInlineCSS(config, mainOptions)(params));
+  async (...params: any) => {
+    return cssToJson(await tailwindInlineCSS(config, mainOptions)(params));
   };
 
 const twi: typeof types.twi = tailwindInlineCSS();
