@@ -57,6 +57,9 @@ declare module "tailwindcss/src/lib/setupContextUtils.js" {
     config: TailwindConfig,
     changedContent?: ChangedContent[]
   ): JitContext;
+
+  // Added by patches/tailwindcss+3.4.19.patch.
+  export function cloneContext(context: JitContext, changedContent: ChangedContent[]): JitContext;
 }
 
 declare module "tailwindcss/src/processTailwindFeatures.js" {
