@@ -1,0 +1,41 @@
+diff --git a/node_modules/tailwindcss/src/lib/setupContextUtils.js b/node_modules/tailwindcss/src/lib/setupContextUtils.js
+index 004c936..3c90be2 100644
+--- a/node_modules/tailwindcss/src/lib/setupContextUtils.js
++++ b/node_modules/tailwindcss/src/lib/setupContextUtils.js
+@@ -1278,6 +1278,36 @@ export function createContext(tailwindConfig, changedContent = [], root = postcs
+   return context
+ }
+ 
++// Patched in by tw-to-css: shares the registered plugins, but starts every cache createContext starts empty.
++export function cloneContext(context, changedContent) {
++  let offsets = context.offsets
++  let clone = {
++    ...context,
++    disposables: [],
++    ruleCache: new Set(),
++    candidateRuleCache: new Map(),
++    classCache: new Map(),
++    applyClassCache: new Map(),
++    notClassCache: new Set(context.tailwindConfig.blocklist ?? []),
++    postCssNodeCache: new Map(),
++    candidateRuleMap: new Map(context.candidateRuleMap),
++    changedContent: changedContent,
++    variantMap: new Map(context.variantMap),
++    stylesheetCache: null,
++    variantOptions: new Map(context.variantOptions),
++    offsets: Object.assign(new Offsets(), offsets, {
++      offsets: { ...offsets.offsets },
++      layerPositions: { ...offsets.layerPositions },
++      variantOffsets: new Map(offsets.variantOffsets),
++    }),
++
++    markInvalidUtilityCandidate: (candidate) => markInvalidUtilityCandidate(clone, candidate),
++    markInvalidUtilityNode: (node) => markInvalidUtilityNode(clone, node),
++  }
++
++  return clone
++}
++
+ let contextMap = sharedState.contextMap
+ let configContextMap = sharedState.configContextMap
+ let contextSourcesMap = sharedState.contextSourcesMap
